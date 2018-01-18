@@ -16,7 +16,7 @@ def decisionTreeLearner(dataset, m=0):
         elif len(attrs) == 0:
             return best_common_value(examples)
         elif errors(examples) < m:
-            return Leaf.DecisionLeaf(best_common_value(examples))
+            return best_common_value(examples)
         else:
             A = choose_attribute(attrs, examples)
             tree = Fork.DecisionFork(A, dataset.attrnames[A])
@@ -74,18 +74,17 @@ def decisionTreeLearner(dataset, m=0):
         """Return the expected reduction in entropy from splitting by attr."""
 
         def Gini(examples):
-            indexs = 0
-            prob = 0
+            indexs = 1
             for val in values[target]:
                 if len(examples) != 0:
-                    prob = count(target, val, examples) / len(examples)
-                    indexs += prob * (1 - prob)
+                    prob = float(count(target, val, examples)) / len(examples)
+                    indexs -= prob ** 2
             return indexs
 
         def remainder(examples):
             R = 0
             for (v, examples_k) in split(attr, examples):
-                R += (len(examples_k) / len(examples)) * (Gini(examples_k))
+                R += (len(examples_k) / (float(len(examples)))) * (Gini(examples_k))
             return R
 
         return Gini(examples) - remainder(examples)
