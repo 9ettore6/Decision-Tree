@@ -17,7 +17,7 @@ class DataSet:
     access fields like d.examples and d.target and d.inputs."""
 
     def __init__(self, name='', examples=None, inputs=None, attrs=None,
-                 target=-1, attrnames=None, values=None):
+                 target=None, attrnames=None, values=None):
         """Accepts any of DataSet's fields. Examples can also be a
         string or file from which to parse examples using parse_csv.
         Optional parameter: exclude, as documented in .setproblem().

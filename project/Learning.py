@@ -1,12 +1,13 @@
 import Fork
 import Leaf
 
-num_nodes = 0
-
 
 def decisionTreeLearner(dataset, m=0):
     target = dataset.target
     values = dataset.values
+
+    class Nodes:
+        internal_nodes = 0
 
     def decision_tree_learning(examples, attrs, m, parent_examples=()):
         if len(examples) == 0:
@@ -19,12 +20,12 @@ def decisionTreeLearner(dataset, m=0):
             return best_common_value(examples)
         else:
             A = choose_attribute(attrs, examples)
-            tree = Fork.DecisionFork(A, dataset.attrnames[A])
-            global num_nodes
-            num_nodes += 1
+            tree = Fork.DecisionFork(A, dataset.attrnames[A], best_common_value(examples))
+            # crea un albero con la radice nell'attributo di indice A, non ha rami all' inizio
+            Nodes.internal_nodes += 1
             for (value, exs) in split(A, examples):
                 subtree = decision_tree_learning(exs, removeall(A, attrs), m, examples)
-                tree.add(value, subtree)
+                tree.add(value, subtree)  # aggiungo un ramo
             return tree
 
     def errors(examples):
@@ -69,7 +70,7 @@ def decisionTreeLearner(dataset, m=0):
             if information_gain(ex, examples) >= best:
                 best = information_gain(ex, examples)
                 better = ex
-        return better
+        return better  # intero che mi individua l'indice dell'attributo con l'information gain migliore
 
     def information_gain(attr, examples):
         """Return the expected reduction in entropy from splitting by attr."""
@@ -92,12 +93,7 @@ def decisionTreeLearner(dataset, m=0):
 
     def split(attr, examples):
         """Return a list of (val, examples) pairs for each val of attr."""
-        '''for v in values[attr]:
-            for e in examples:
-                if e[attr] == v:
-                    return v, e
-        '''
-
         return [(v, [e for e in examples if e[attr] == v]) for v in values[attr]]
 
-    return decision_tree_learning(dataset.examples, dataset.inputs, m), num_nodes
+    tree = decision_tree_learning(dataset.examples, dataset.inputs, m)
+    return tree, Nodes.internal_nodes

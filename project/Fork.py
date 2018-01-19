@@ -5,14 +5,18 @@ class DecisionFork:
     def __init__(self, attr, attrname=None, default_child=None, branches=None):
         """Initialize by saying what attribute this node tests."""
         self.attr = attr
-        self.attrname = attrname or attr
         self.default_child = default_child
+        self.attrname = attrname
         self.branches = branches or {}
 
     def __call__(self, example):
         """Given an example, classify it using the attribute and the branches."""
         attrvalue = example[self.attr]
-        return self.branches[attrvalue](example)
+        if attrvalue in self.branches:
+            return self.branches[attrvalue](example)
+        else:
+            # return default class when attribute is unknown
+            return self.default_child(example)
 
     def add(self, val, subtree):
         """Add a branch.  If self.attr = val, go to the given subtree."""

@@ -1,5 +1,4 @@
 import random
-
 import math
 import pydotplus
 from IPython.core.display import Image
@@ -20,14 +19,14 @@ graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
 # Image(graph.write_png('tree.png'))
 '''
 
-attrnames = ['buying', 'maint', 'doors', 'pearsons', 'lug_boot', 'safety', 'value']
-values = [['v-high', 'high', 'med', 'low'],
-          ['v-high', 'high', 'med', 'low'],
+attrnames = ['buying', 'maint', 'doors', 'pearsons', 'lug_boot', 'safety', 'value']  # mnemonic name for attrs
+values = [['vhigh', 'high', 'med', 'low'],
+          ['vhigh', 'high', 'med', 'low'],
           ['2', '3', '4', '5more'],
           ['2', '4', 'more'],
           ['small', 'med', 'big'],
           ['low', 'med', 'high'],
-          ['unacc', 'acc', 'good', 'v-good']]
+          ['unacc', 'acc', 'good', 'vgood']]
 
 
 def test(mr, target):
@@ -39,10 +38,11 @@ def test(mr, target):
         for m in range(mr, 0, -1):
             data = create_dataset('Car.txt', attrnames, target, values)
             data.examples, tes = createSet(data)
-            tre, node = decisionTreeLearner(data, 20)
+            tre, node = decisionTreeLearner(data, m)
             if i == 0:
                 trainerr.append(count_errors(data.examples, target, tre))
                 test_err.append(count_errors(tes, target, tre))
+                print(trainerr)
                 internal_nodes.append(node)
             elif i == 9:
                 trainerr[j] = float("%.3f" % (trainerr[j] / 10))
@@ -64,49 +64,57 @@ def test(mr, target):
 def count_errors(examples, target, tree):
     i = 0
     for e in examples:
-        if e[target] != tree(e):
+        if e[target] == tree(e):
             i += 1
-    return i / len(examples) * 100
+    return float(i / len(examples) * 100)
 
 
-def createInput(attributes, target):
+def createSet(dataset):
+    random.shuffle(dataset.examples)
+    # print(examples) ok
+    bound = int((len(dataset.examples) / 100) * 80)
+    train = dataset.examples[0:bound]
+    test = dataset.examples[bound:len(dataset.examples)]  # bound escluso
+    return train, test
+
+
+def create_dataset(file, attrnames, target, values):  # preparo di dati da mandare alla classe Dataset
+    """Create a dataset from a file, given its attrs names, values and index target"""
+    examples = formatfile(file)
+    # examples = create_examples(data)
+    attrs = [k for k in range(len(examples[0]))]  # creo gli interi per indicizzare gli esempi
+    inputs = create_input(attrs, target)
+    return DataSet(file, examples, inputs, attrs, target, attrnames, values)
+
+
+def formatfile(file):
+    data = []
+    f = open(file)
+    for line in f.readlines():
+        row = line.split(',')  # trasforma la linea in lista
+        row = [r.rstrip() for r in row]  # formatto le linee eliminando info inutili "/n"
+        data.append(row)  # data: lista contente liste di esempi
+    return data
+
+
+def create_examples(data):  # INUTILE????
+    examples = []
+    for i in range(len(data)):
+        example = []
+        for j in range(len(data[0])):
+            example.append(data[i][j])  # creo liste di esempi poi metto tutto in examples(lista di liste)
+        examples.append(example)
+    return examples
+
+
+def create_input(attributes, target):
     """Returns a list of attributes without the target"""
     inputs = deepcopy(attributes)
     del inputs[target]  # rimuove l'elemento di indice target
     return inputs
 
 
-def createSet(dataset):
-    random.shuffle(dataset.examples)
-    # print(examples) ok
-    bound = int((len(dataset.examples) / 100) * 0.8)
-    train = dataset.examples[0:bound]
-    test = dataset.examples[bound:len(dataset.examples)]
-    return train, test
-
-
-def create_dataset(file, attrnames, target, values):
-    """Create a dataset from a file, given its attrs names, values and index target"""
-    data = []
-    parts = []
-    for line in open(file).readlines():
-        parts = line.rstrip()
-        parts = line.split(',')
-        parts = [p.rstrip() for p in parts]  # formatto line eliminando info superflue "\n"
-        data.append(parts)
-    examples = []
-    for i in range(len(data)):
-        example = {}
-        for j in range(len(data[0])):
-            example[j] = data[i][j]  # creo liste di esempi e poi metto tutto in examples una liste di liste di esempi
-        examples.append(example)
-    attrs = [k for k in range(len(examples[0]))]  # creo gli interi per indicizzare gli esempi
-    inputs = createInput(attrs, target)
-
-    return DataSet(file, examples, inputs, attrs, target, attrnames, values)
-
-
 target = 6
-test(10, target)
+test(5, target)
 tre, node = decisionTreeLearner(create_dataset('Car.txt', attrnames, target, values))
-tre.display()
+#tre.display()
