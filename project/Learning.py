@@ -23,7 +23,7 @@ def decisionTreeLearner(dataset, m=0):
             global num_nodes
             num_nodes += 1
             for (value, exs) in split(A, examples):
-                subtree = decision_tree_learning(exs, removeall(A, attrs), examples)
+                subtree = decision_tree_learning(exs, removeall(A, attrs), m, examples)
                 tree.add(value, subtree)
             return tree
 
@@ -44,8 +44,9 @@ def decisionTreeLearner(dataset, m=0):
         counter = 0
         popular = 0
         for v in values[target]:
-            if count(target, v, examples) > counter:
-                counter = count(target, v, examples)
+            c = count(target, v, examples)
+            if c > counter:
+                counter = c
                 popular = v
         return Leaf.DecisionLeaf(popular)
 

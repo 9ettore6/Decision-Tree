@@ -106,7 +106,7 @@ def create_dataset(file, attrnames, target, values):
     return DataSet(file, examples, inputs, attrs, target, attrnames, values)
 
 
-target = 1
+target = 6
 test(10, target)
 tre, node = decisionTreeLearner(create_dataset('Car.txt', attrnames, target, values))
 tre.display()
