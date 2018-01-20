@@ -1,4 +1,0 @@
-digraph Decision_Tree {
-	rankdir="Node" size=8.5
-	node [shape=doublecircle]
-}
