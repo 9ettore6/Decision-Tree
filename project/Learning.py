@@ -5,6 +5,8 @@ import Leaf
 def decisionTreeLearner(dataset, m=0):
     target = dataset.target
     values = dataset.values
+    examples = dataset.examples
+    inputs = dataset.inputs
 
     class Nodes:
         internal_nodes = 0
@@ -16,21 +18,21 @@ def decisionTreeLearner(dataset, m=0):
             return Leaf.DecisionLeaf(examples[0][target])
         elif len(attrs) == 0:
             return best_common_value(examples)
-        elif errors(examples) < m:
+        elif errors(examples) < m:  # try to avoid loose of information with a too strict bound
             return best_common_value(examples)
         else:
             A = choose_attribute(attrs, examples)
             tree = Fork.DecisionFork(A, dataset.attrnames[A], best_common_value(examples))
-            # crea un albero con la radice nell'attributo di indice A, non ha rami all' inizio
+            # create tree with root A, no branches at first
             Nodes.internal_nodes += 1
             for (value, exs) in split(A, examples):
                 subtree = decision_tree_learning(exs, removeall(A, attrs), m, examples)
-                tree.add(value, subtree)  # aggiungo un ramo
+                tree.add(value, subtree)  # add branch
             return tree
 
     def errors(examples):
         maxval = best_common_value(examples)
-        numval = count(target, maxval, examples)
+        numval = count(target, maxval, examples)  # how many target == maxval?
         return len(examples) - numval
 
     def removeall(item, seq):
@@ -70,7 +72,7 @@ def decisionTreeLearner(dataset, m=0):
             if information_gain(ex, examples) >= best:
                 best = information_gain(ex, examples)
                 better = ex
-        return better  # intero che mi individua l'indice dell'attributo con l'information gain migliore
+        return better  # index(int) of the attribute with best information gain
 
     def information_gain(attr, examples):
         """Return the expected reduction in entropy from splitting by attr."""
@@ -95,5 +97,5 @@ def decisionTreeLearner(dataset, m=0):
         """Return a list of (val, examples) pairs for each val of attr."""
         return [(v, [e for e in examples if e[attr] == v]) for v in values[attr]]
 
-    tree = decision_tree_learning(dataset.examples, dataset.inputs, m)
+    tree = decision_tree_learning(examples, inputs, m)
     return tree, Nodes.internal_nodes
