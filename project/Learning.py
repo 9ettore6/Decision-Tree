@@ -79,7 +79,7 @@ def decisionTreeLearner(dataset, m=0):
         return better  # index(int) of the attribute with best information gain
 
     def information_gain(attr, examples):
-        """Return the expected reduction in entropy from splitting by attr."""
+        """Meausure of gain throught Gini coefficent, to choose the best attribute"""
 
         def Gini(examples):
             indexs = 1

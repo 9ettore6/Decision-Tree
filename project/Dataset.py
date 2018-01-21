@@ -11,19 +11,10 @@ class DataSet:
                  values for the corresponding attribute. If initially None,
                  it is computed from the known examples by self.setproblem.
                  If not None, an erroneous value raises ValueError.
-    d.name       Name of the data set (for output display only).
-
-    Normally, you call the constructor and you're done; then you just
-    access fields like d.examples and d.target and d.inputs."""
+    d.name       Name of the data set (for output display only)."""
 
     def __init__(self, name='', examples=None, inputs=None, attrs=None,
                  target=None, attrnames=None, values=None):
-        """Accepts any of DataSet's fields. Examples can also be a
-        string or file from which to parse examples using parse_csv.
-        Optional parameter: exclude, as documented in .setproblem().
-        >>> DataSet(examples='1, 2, 3')
-        <DataSet(): 1 examples, 3 attributes>
-        """
         self.name = name
         self.examples = examples
         self.target = target

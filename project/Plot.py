@@ -1,22 +1,8 @@
-# This Python file uses the following encoding: utf-8
-import os, sys
 import random
-import math
 from copy import deepcopy
-
 import matplotlib.pyplot as plt
 from Dataset import DataSet
 from Learning import decisionTreeLearner
-
-'''iris = load_iris()
-clf = tree.DecisionTreeClassifier()
-clf = clf.fit(iris.data, iris.target)
-dot_data = StringIO()
-tree.export_graphviz(clf, out_file=dot_data)
-graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
-
-# Image(graph.write_png('tree.png'))
-'''
 
 
 # iterate several times to avoid that favour/unfavour example compromise my test
