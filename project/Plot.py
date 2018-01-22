@@ -50,14 +50,13 @@ def count_errors(examples, target, tree):
 
 def createSets(dataset):
     random.shuffle(dataset.examples)
-    # print(examples) ok
     bound = int((len(dataset.examples) / 100) * 80)
     train = dataset.examples[0:bound]
     test = dataset.examples[bound:len(dataset.examples)]  # bound not included
     return train, test
 
 
-def create_dataset(file, attrnames, target, values):  # format dates to send its at Dataset class
+def create_dataset(file, attrnames, target, values):  # format dates to send to Dataset class
     """Create a dataset from a file, given its attrs names, values and index target"""
     examples = formatfile(file)
     # examples = create_examples(data)

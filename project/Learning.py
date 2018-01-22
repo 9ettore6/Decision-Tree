@@ -72,14 +72,14 @@ def decisionTreeLearner(dataset, m=0):
     def choose_attribute(attrs, examples):
         """Choose the attribute with the highest information gain."""
         best = 0
-        for ex in attrs:
-            if information_gain(ex, examples) >= best:
-                best = information_gain(ex, examples)
-                better = ex
+        for attr in attrs:
+            if information_gain(attr, examples) >= best:
+                best = information_gain(attr, examples)
+                better = attr
         return better  # index(int) of the attribute with best information gain
 
     def information_gain(attr, examples):
-        """Meausure of gain throught Gini coefficent, to choose the best attribute"""
+        """Meausure of gain through Gini coefficent, to choose the best attribute"""
 
         def Gini(examples):
             indexs = 1

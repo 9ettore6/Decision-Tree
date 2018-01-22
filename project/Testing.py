@@ -12,7 +12,7 @@ def car():
               ['small', 'med', 'big'],
               ['low', 'med', 'high'],
               ['unacc', 'acc', 'good', 'vgood']]
-    print('Advice: a value greater than 200 could take lot of time')
+    print('Advice: a value greater than 300 could take lot of time')
     mr = input('Inserire m_range (value that control tree complexity):')
     target = 6
     test('Car.txt', mr, target, 'Car', attrnames, values)
@@ -34,7 +34,7 @@ def tictactoe():
               ['x', 'o', 'b'],
               ['x', 'o', 'b'],
               ['positive', 'negative']]
-    print('Advice: a value greater than 200 could take lot of time')
+    print('Advice: a value greater than 300 could take lot of time')
     mr = input('Inserire m_range (value that control tree complexity):')
     target = 9
     test('TicTacToe.txt', mr, target, 'TicTacToe', attrnames, values)
@@ -54,7 +54,8 @@ def nursery():
               ['nonprob', 'slightly_prob', 'problematic'],
               ['recommended', 'priority', 'not_recom'],
               ['not-recom', 'recommend', 'very_recom', 'priority', 'spec_prior']]
-    print('Warning: Nursery is a big dataset so m_range value should be less than 100')
+    print('Warning: Nursery is a big dataset so if you are not sure of your machine power,'
+          ' m_range value should be less than 150')
     mr = input('Inserire m_range (value that control tree complexity):')
     target = 8
     test('Nursery.txt', mr, target, 'Nursery', attrnames, values)
