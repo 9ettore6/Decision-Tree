@@ -41,6 +41,7 @@ def decisionTreeLearner(dataset, pruning=0, m=0):
                     counter = c
             return len(examples) - counter
         elif pruning == 1:
+            # remainder nodes pruning
             return len(examples)
 
     def removeall(item, seq):
