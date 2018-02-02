@@ -2,41 +2,49 @@ import Fork
 import Leaf
 
 
-def decisionTreeLearner(dataset, m=0):
+def decisionTreeLearner(dataset, pruning=0, m=0):
     target = dataset.target
     values = dataset.values
     examples = dataset.examples
     inputs = dataset.inputs
 
-    class Nodes:
+    class Nodes:  # alternative to global variable
         internal_nodes = 0
 
-    def decision_tree_learning(examples, attrs, m, parent_examples=()):
+    def decision_tree_learning(examples, attrs, m, pruning, parent_examples=()):
         if len(examples) == 0:
             return best_common_value(parent_examples)
         elif all_same_class(examples):
             return Leaf.DecisionLeaf(examples[0][target])
         elif len(attrs) == 0:
             return best_common_value(examples)
-        elif errors(examples) < m:  # try to avoid loose of information with a too strict bound
+        # as parameter I've use the lenght of examples that is decrease at every iteration from removeall
+        elif errors(examples, pruning) < m:  # regularization(pre-pruning)
             return best_common_value(examples)
         else:
             A = choose_attribute(attrs, examples)
             tree = Fork.DecisionFork(A, dataset.attrnames[A], best_common_value(examples))
-            # create tree with root A, no branches at first
+            # create tree with root A, no branches first time
             Nodes.internal_nodes += 1
             for (value, exs) in split(A, examples):
-                subtree = decision_tree_learning(exs, removeall(A, attrs), m, examples)
+                subtree = decision_tree_learning(exs, removeall(A, attrs), m, pruning, examples)
                 tree.add(value, subtree)  # add branch
             return tree
 
-    def errors(examples):
-        maxval = best_common_value(examples)
-        numval = count(target, maxval, examples)  # how many target == maxval?
-        return len(examples) - numval
+    def errors(examples, pruning):
+        if pruning == 0:
+            # max number of target value in examples
+            counter = 0
+            for v in values[target]:
+                c = count(target, v, examples)
+                if c > counter:
+                    counter = c
+            return len(examples) - counter
+        elif pruning == 1:
+            return len(examples)
 
     def removeall(item, seq):
-        """Return a copy of seq (or string) with all occurences of item removed."""
+        """Return a copy of seq with all occurences of item removed."""
         if isinstance(seq, str):
             return seq.replace(item, '')
         else:
@@ -101,5 +109,5 @@ def decisionTreeLearner(dataset, m=0):
         """Return a list of (val, examples) pairs for each val of attr."""
         return [(v, [e for e in examples if e[attr] == v]) for v in values[attr]]
 
-    tree = decision_tree_learning(examples, inputs, m)
+    tree = decision_tree_learning(examples, inputs, m, pruning)
     return tree, Nodes.internal_nodes

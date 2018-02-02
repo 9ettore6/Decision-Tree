@@ -1,3 +1,4 @@
+from __future__ import print_function
 import random
 from copy import deepcopy
 import matplotlib.pyplot as plt
@@ -5,8 +6,10 @@ from Dataset import DataSet
 from Learning import decisionTreeLearner
 
 
-# iterate several times to avoid that favour/unfavour example compromise my test
-def test(file, mr, target, name, attrnames, values):
+# iterate several times to avoid that favour/unfavour example compromise the test
+def test(file, mr, target, name, attrnames, values, pruning):
+    print(' ')
+    print('Learning', end='', )
     trainerr = []
     test_err = []
     internal_nodes = []
@@ -15,12 +18,12 @@ def test(file, mr, target, name, attrnames, values):
         for m in range(mr, 0, -1):
             data = create_dataset(file, attrnames, target, values)
             data.examples, tes = createSets(data)
-            tree, nodes = decisionTreeLearner(data, m)
+            tree, nodes = decisionTreeLearner(data, pruning, m)
             if i == 0:
                 trainerr.append(count_errors(data.examples, target, tree))
                 test_err.append(count_errors(tes, target, tree))
                 internal_nodes.append(nodes)
-            elif i == 9:  # last iteration: average on all result
+            elif i == 9:  # last iteration: average on all results
                 trainerr[j] = trainerr[j] / 10
                 test_err[j] = test_err[j] / 10
                 internal_nodes[j] = internal_nodes[j] / 10
@@ -29,6 +32,8 @@ def test(file, mr, target, name, attrnames, values):
                 test_err[j] += count_errors(tes, target, tree)
                 internal_nodes[j] += nodes
             j += 1
+        print('.', end='')
+    print('\n')
     plt.title(name)
     plt.plot(internal_nodes, trainerr, label="Training set")
     plt.plot(internal_nodes, test_err, label="Test set")
