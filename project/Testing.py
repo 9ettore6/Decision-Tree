@@ -14,7 +14,8 @@ def car():
               ['unacc', 'acc', 'good', 'vgood']]
     print(' ')
     print('Advice: a value greater than 300 could take lot of time')
-    mr = input('Inserire m_range (int value that control tree complexity): e utile')
+    print('Used for experiment: 450')
+    mr = input('Inserire m_range (int value that control tree complexity):')
     print(' ')
     print('Inserire tipo di pruning')
     pruning = input('0 for Misclassification error pruning, 1 for Reamainder nodes pruning:')
@@ -40,6 +41,7 @@ def tictactoe():
               ['positive', 'negative']]
     print(' ')
     print('Advice: a value greater than 300 could take lot of time')
+    print('Used for experiment: 800')
     mr = input('Inserire m_range (int value that control tree complexity):')
     print(' ')
     print('Inserire tipo di pruning')
@@ -65,6 +67,7 @@ def nursery():
     print(' ')
     print('Warning: Nursery is a big dataset so if you are not sure of your machine power,'
           ' m_range value should be less than 150')
+    print('Used for experiment: 350')
     mr = input('Inserire m_range (int value that control tree complexity):')
     print(' ')
     print('Inserire tipo di pruning')

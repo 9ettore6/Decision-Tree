@@ -43,6 +43,7 @@ def test(file, mr, target, name, attrnames, values, pruning):
     plt.show()
 
 
+# count the number of error, that is if predict value is different from target
 def count_errors(examples, target, tree):
     counter = 0
     for ex in examples:
@@ -53,6 +54,7 @@ def count_errors(examples, target, tree):
     return float(counter) / len(examples) * float(100)
 
 
+# hold-out cross validation
 def createSets(dataset):
     random.shuffle(dataset.examples)
     bound = int((len(dataset.examples) / 100) * 80)
@@ -61,11 +63,10 @@ def createSets(dataset):
     return train, test
 
 
-def create_dataset(file, attrnames, target, values):  # format dates to send to Dataset class
-    """Create a dataset from a file, given its attrs names, values and index target"""
+# format dates to send to Dataset class
+def create_dataset(file, attrnames, target, values):
     examples = formatfile(file)
-    # examples = create_examples(data)
-    attrs = [k for k in range(len(examples[0]))]  # creo gli interi per indicizzare gli esempi
+    attrs = [k for k in range(len(examples[0]))]  # index of examples
     inputs = create_input(attrs, target)
     return DataSet(file, examples, inputs, attrs, target, attrnames, values)
 
@@ -75,13 +76,13 @@ def formatfile(file):
     f = open(file)
     for line in f.readlines():
         row = line.split(',')  # transform line in list
-        row = [r.rstrip() for r in row]  # format lines deleting unuseful infos "/n"
+        row = [r.rstrip() for r in row]  # format lines deleting unuseful infos as "/n"
         data.append(row)  # data: list that contains list of example
     return data
 
 
+# Returns a list of attributes without the target
 def create_input(attributes, target):
-    """Returns a list of attributes without the target"""
     inputs = deepcopy(attributes)
     del inputs[target]  # remove target element(index of target)
     return inputs

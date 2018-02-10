@@ -1,6 +1,5 @@
-
 class DecisionLeaf:
-    """A leaf of a decision tree holds just a result."""
+    # A leaf of a decision tree holds just a result.
 
     def __init__(self, result):
         self.result = result

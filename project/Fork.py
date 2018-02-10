@@ -3,7 +3,7 @@ class DecisionFork:
     of branches, one for each of the attribute's values."""
 
     def __init__(self, attr, attrname=None, default_child=None, branches=None):
-        """Initialize by saying what attribute this node tests."""
+        # Initialize by saying what attribute this node tests.
         self.attr = attr
         self.default_child = default_child
         self.attrname = attrname
@@ -20,7 +20,7 @@ class DecisionFork:
             return self.default_child(example)
 
     def add(self, val, subtree):
-        """Add a branch.If self.attr = val, go to the given subtree."""
+        # Add a branch. If self.attr = val, go to the given subtree.
         self.branches[val] = subtree
 
     def display(self, indent=0):

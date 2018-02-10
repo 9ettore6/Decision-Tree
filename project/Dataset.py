@@ -1,5 +1,5 @@
 class DataSet:
-    """A data set for a machine learning problem. It has the following fields:
+    """A dataset for a machine learning problem. It has the following fields:
     d.examples   A list of examples. Each one is a list of attribute values.
     d.attrs      A list of integers to index into an example, so example[attr]
                  gives a value. Normally the same as range(len(d.examples[0])).

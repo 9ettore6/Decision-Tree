@@ -15,16 +15,15 @@ def decisionTreeLearner(dataset, pruning=0, m=0):
         if len(examples) == 0:
             return best_common_value(parent_examples)
         elif all_same_class(examples):
-            return Leaf.DecisionLeaf(examples[0][target])
+            return Leaf.DecisionLeaf(examples[0][target])  # add a leaf
         elif len(attrs) == 0:
             return best_common_value(examples)
-        # as parameter I've use the lenght of examples that is decrease at every iteration from removeall
         elif errors(examples, pruning) < m:  # regularization(pre-pruning)
             return best_common_value(examples)
         else:
             A = choose_attribute(attrs, examples)
             tree = Fork.DecisionFork(A, dataset.attrnames[A], best_common_value(examples))
-            # create tree with root A, no branches first time
+            # first time create tree with root A, no branches
             Nodes.internal_nodes += 1
             for (value, exs) in split(A, examples):
                 subtree = decision_tree_learning(exs, removeall(A, attrs), m, pruning, examples)
@@ -33,7 +32,7 @@ def decisionTreeLearner(dataset, pruning=0, m=0):
 
     def errors(examples, pruning):
         if pruning == 0:
-            # max number of target value in examples
+            # count the most popular target
             counter = 0
             for v in values[target]:
                 c = count(target, v, examples)
@@ -44,15 +43,12 @@ def decisionTreeLearner(dataset, pruning=0, m=0):
             # remainder nodes pruning
             return len(examples)
 
+    # Return a copy of seq with all occurences of item removed.
     def removeall(item, seq):
-        """Return a copy of seq with all occurences of item removed."""
-        if isinstance(seq, str):
-            return seq.replace(item, '')
-        else:
-            return [x for x in seq if x != item]
+        return [x for x in seq if x != item]
 
+    # Return the most popular target value for this set of examples.
     def best_common_value(examples):
-        """Return the most popular target value for this set of examples."""
         counter = 0
         popular = 0
         for v in values[target]:
@@ -62,24 +58,24 @@ def decisionTreeLearner(dataset, pruning=0, m=0):
                 popular = v
         return Leaf.DecisionLeaf(popular)
 
+    # Count the number of examples that have attr = val.
     def count(attr, val, examples):
-        """Count the number of examples that have attr = val."""
         counter = 0
         for e in examples:
             if e[attr] == val:
                 counter += 1
         return counter
 
+    # Are all these examples in the same target class?
     def all_same_class(examples):
-        """Are all these examples in the same target class?"""
         _class = examples[0][target]
         for e in examples:
             if e[target] != _class:
                 return False
         return True
 
+    # Choose the attribute with the highest information gain.
     def choose_attribute(attrs, examples):
-        """Choose the attribute with the highest information gain."""
         best = 0
         for attr in attrs:
             if information_gain(attr, examples) >= best:
@@ -88,7 +84,7 @@ def decisionTreeLearner(dataset, pruning=0, m=0):
         return better  # index(int) of the attribute with best information gain
 
     def information_gain(attr, examples):
-        """Meausure of gain through Gini coefficent, to choose the best attribute"""
+        # Meausure of gain through Gini coefficent, to choose the best attribute
 
         def Gini(examples):
             indexs = 1
@@ -106,8 +102,8 @@ def decisionTreeLearner(dataset, pruning=0, m=0):
 
         return Gini(examples) - remainder(examples)
 
+    # Return a list of (val, examples) pairs for each val of attr.
     def split(attr, examples):
-        """Return a list of (val, examples) pairs for each val of attr."""
         return [(v, [e for e in examples if e[attr] == v]) for v in values[attr]]
 
     tree = decision_tree_learning(examples, inputs, m, pruning)
