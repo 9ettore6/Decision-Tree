@@ -1,22 +1,18 @@
- Intelligenza Artificiale 
- Celozzi Ettore Maria 5963792
+ Artificial Intelligence 
+ Celozzi Ettore
+ 
+-Learning function, tree construction and dataset building are provided from aima site
+(https://github.com/aimacode/aima-python/blob/master/learning.py). These are been modified 
+to adapt them to my problem;
 
--Dal sito aima(https://github.com/aimacode/aima-python/blob/master/learning.py) sono 
- state riprese le funzioni per l'apprendimento, la costruzione dell'albero e per la 
- costruzione del dataset alle quali sono state apportate delle modifiche per adattarle
- al problema;
+-Python version 2.7;
 
--La versione di Python utilizzata è la 2.7;
-
--Le librerie utilizzate sono: 1 "matplotlib" per creare i grafici;
-			      2 "print_function" per usare la stampa di python 3.x;
-			      3 "random" per mischiare gli esempi ad ogni iterazione;
-
--Per l'esecuzione del programma basta eseguire il file "Testing.py", infatti all'interno
- di questo sono contenuti attributi e target di ogni dataset. Una volta eseguito
- il programma richiederà di scegliere tra i vari dataset, di selezionare il valore di
- m_range(nonostante sia stato scelto un valore per i risulatati presentati nella relazione,
- ho voluto lasciare questa libertà in quanto un valore elevato può impiegare molto tempo) 
- e la scelta del tipo di pruning da utilizzare.
- Una volta eseguito, il programma mostrerà le curve di apprendimento e infine l'albero 
- che si ottiene con 1 esecuzione dell'algoritmo di learning senza pre-pruning.
+-This program requires 3 libraries: 1 "matplotlib" for plotting;
+				    2 "print_function" to use python 3.x's function;
+				    3 "random" to shuffle examples at each iteration;
+	
+-To start the program is needed to execute "Testing.py" script. This file contains attributes
+and targets of each dataset. Once started a GUI reqeusts to select the dataset to use, to set
+"m_range"(a default value is provided; be careful an high value could take long time!) and to
+choose pruning type. At the end the plot of learning curves will be displayed and a raw tree 
+that shows the result of 1 execution without pre-pruning.
